@@ -3,26 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria de Referências</title>
+    <title>Galeria de Referências Retrô</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <!-- A barra lateral será preenchida pelo JavaScript -->
-        <aside id="sidebar">
-            <h1>Referências</h1>
-            <div id="file-tree">
-                <!-- O JavaScript vai construir a árvore de arquivos aqui -->
+    <div class="window-container">
+        <div class="title-bar">
+            <div class="title-bar-text">Meu Milanote Retrô</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close"></button>
             </div>
-        </aside>
-
-        <!-- Área onde a imagem selecionada aparecerá -->
-        <main id="content-viewer">
-            <div class="placeholder">
-                <p>Selecione uma imagem na barra lateral para visualizá-la.</p>
-            </div>
-        </main>
+        </div>
+        <div class="window-body">
+            <aside id="sidebar">
+                <!-- A hierarquia de pastas será inserida aqui pelo JavaScript -->
+                <p>Carregando arquivos...</p>
+            </aside>
+            <main id="content">
+                <div class="image-viewer">
+                    <p id="placeholder-text">Selecione uma imagem na barra lateral para visualizá-la aqui.</p>
+                    <img id="image-display" src="" alt="Imagem selecionada" style="display: none;">
+                </div>
+            </main>
+        </div>
     </div>
 
     <script src="script.js"></script>
