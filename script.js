@@ -1,106 +1,90 @@
-// =======================================================
-// CONFIGURE AQUI SEU USUÁRIO E NOME DO REPOSITÓRIO
-// =======================================================
-const GITHUB_USER = `https://github.com/Schneidolas/MilaNoob/tree/main`;
-const REPO_NAME = "imagens";
-// =======================================================
+// -----------------------------------------------------------------
+// CONFIGURE AQUI!
+// Substitua com seu nome de usuário, nome do repositório e a pasta.
+const GITHUB_USER = 'SEU_NOME_DE_USUARIO';
+const REPO_NAME = 'NOME_DO_SEU_REPOSITORIO';
+const IMAGE_FOLDER = 'referencias';
+// -----------------------------------------------------------------
 
-const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/`;
-const ROOT_PATH = "imagens"; // Nome da pasta principal de imagens
+const sidebar = document.getElementById('sidebar');
+const imageDisplay = document.getElementById('image-display');
+const placeholderText = document.getElementById('placeholder-text');
 
-const fileTreeContainer = document.getElementById('file-tree');
-const contentViewer = document.getElementById('content-viewer');
-
-// Função principal que inicia o processo
-document.addEventListener('DOMContentLoaded', () => {
-    buildFileTree(ROOT_PATH, fileTreeContainer);
-});
+// Função para exibir a imagem clicada
+function displayImage(imageUrl) {
+    placeholderText.style.display = 'none';
+    imageDisplay.style.display = 'block';
+    imageDisplay.src = imageUrl;
+}
 
 /**
- * Função recursiva para construir a árvore de arquivos.
- * Ela busca o conteúdo de um caminho e cria os elementos HTML.
+ * Função recursiva que busca arquivos e pastas na API do GitHub
+ * e constrói a árvore de arquivos na barra lateral.
  * @param {string} path - O caminho da pasta a ser buscada.
- * @param {HTMLElement} parentElement - O elemento HTML onde a árvore será inserida.
+ * @param {HTMLElement} parentElement - O elemento HTML onde os itens serão adicionados.
  */
 async function buildFileTree(path, parentElement) {
+    const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${path}`;
+
     try {
-        const response = await fetch(API_URL + path);
+        const response = await fetch(apiUrl);
         if (!response.ok) {
-            throw new Error(`Erro ao buscar dados do GitHub: ${response.statusText}`);
+            throw new Error(`Erro na API do GitHub: ${response.statusText}`);
         }
         const items = await response.json();
 
-        // Ordenar para que pastas venham antes de arquivos
+        // Limpa a mensagem de "Carregando..."
+        if (path === IMAGE_FOLDER) {
+            parentElement.innerHTML = '';
+        }
+
+        // Ordena para que as pastas apareçam antes dos arquivos
         items.sort((a, b) => {
             if (a.type === b.type) return a.name.localeCompare(b.name);
             return a.type === 'dir' ? -1 : 1;
         });
-
-        const list = document.createElement('ul');
-        if (parentElement !== fileTreeContainer) {
-            list.classList.add('collapsible-list');
-        }
-
+        
         for (const item of items) {
-            const listItem = document.createElement('li');
-
             if (item.type === 'dir') {
                 // É uma pasta
-                const folderItem = document.createElement('div');
-                folderItem.textContent = item.name;
-                folderItem.classList.add('tree-item', 'folder');
+                const folderDiv = document.createElement('div');
+                folderDiv.className = 'folder';
+                folderDiv.textContent = item.name;
                 
-                // Adiciona evento para expandir/recolher
-                folderItem.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    folderItem.classList.toggle('expanded');
-                });
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'folder-content';
+                contentDiv.style.display = 'none'; // Começa fechado
 
-                listItem.appendChild(folderItem);
-                
-                // Chama a função recursivamente para o subdiretório
-                await buildFileTree(item.path, listItem);
+                folderDiv.onclick = () => {
+                    // Alterna a visibilidade do conteúdo da pasta
+                    const isVisible = contentDiv.style.display === 'block';
+                    contentDiv.style.display = isVisible ? 'none' : 'block';
+                    // Se for a primeira vez abrindo, busca o conteúdo
+                    if (!isVisible && contentDiv.innerHTML === '') {
+                        buildFileTree(item.path, contentDiv);
+                    }
+                };
 
-            } else if (item.type === 'file' && item.name.toLowerCase().endsWith('.png')) {
+                parentElement.appendChild(folderDiv);
+                parentElement.appendChild(contentDiv);
+
+            } else if (item.name.toLowerCase().endsWith('.png')) {
                 // É um arquivo .png
-                const fileItem = document.createElement('div');
-                fileItem.textContent = item.name;
-                fileItem.classList.add('tree-item', 'file');
-
-                // Adiciona evento para mostrar a imagem
-                fileItem.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    displayImage(item.download_url);
-                });
-
-                listItem.appendChild(fileItem);
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'file';
+                fileDiv.textContent = item.name;
+                fileDiv.onclick = () => displayImage(item.download_url);
+                parentElement.appendChild(fileDiv);
             }
-            
-            // Só adiciona o listItem se ele tiver conteúdo
-            if (listItem.children.length > 0) {
-                list.appendChild(listItem);
-            }
-        }
-        
-        // Adiciona a lista ao elemento pai, evitando que sub-listas vazias sejam adicionadas
-        if(list.children.length > 0) {
-            parentElement.appendChild(list);
         }
 
     } catch (error) {
-        console.error("Falha ao construir a árvore de arquivos:", error);
-        contentViewer.innerHTML = `<div class="placeholder"><p>Erro ao carregar arquivos.<br>Verifique o console e a configuração do repositório.</p></div>`;
+        console.error('Falha ao buscar a árvore de arquivos:', error);
+        parentElement.innerHTML = `<p style="color: red;">Erro ao carregar arquivos. Verifique o console (F12) e as configurações no script.js.</p>`;
     }
 }
 
-/**
- * Mostra a imagem selecionada na área de visualização.
- * @param {string} imageUrl - A URL da imagem a ser exibida.
- */
-function displayImage(imageUrl) {
-    contentViewer.innerHTML = ''; // Limpa o conteúdo anterior
-    const img = document.createElement('img');
-    img.src = imageUrl;
-    img.alt = "Imagem de referência";
-    contentViewer.appendChild(img);
-}
+// Inicia o processo quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    buildFileTree(IMAGE_FOLDER, sidebar);
+});
