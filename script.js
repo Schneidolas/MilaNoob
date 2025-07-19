@@ -1,9 +1,9 @@
 // -----------------------------------------------------------------
 // CONFIGURE AQUI!
 // Substitua com seu nome de usuário, nome do repositório e a pasta.
-const GITHUB_USER = 'SEU_NOME_DE_USUARIO';
-const REPO_NAME = 'NOME_DO_SEU_REPOSITORIO';
-const IMAGE_FOLDER = 'referencias';
+const GITHUB_USER = 'Schneidolas';
+const REPO_NAME = 'MilaNoob';
+const IMAGE_FOLDER = 'imagens';
 // -----------------------------------------------------------------
 
 const sidebar = document.getElementById('sidebar');
