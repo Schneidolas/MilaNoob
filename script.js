@@ -1,7 +1,7 @@
 // =======================================================
 // CONFIGURE AQUI SEU USUÁRIO E NOME DO REPOSITÓRIO
 // =======================================================
-const GITHUB_USER = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/`;
+const GITHUB_USER = `https://github.com/Schneidolas/MilaNoob/tree/main`;
 const REPO_NAME = "imagens/HUD";
 // =======================================================
 
