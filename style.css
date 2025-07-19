@@ -1,106 +1,130 @@
-/* Estilo geral - vibe retro */
+/* Estilo inspirado no Windows 95/98 */
 body {
-    background-color: #c0c0c0; /* Cinza clássico do Windows */
-    font-family: "MS Sans Serif", "Tahoma", "Verdana", sans-serif;
-    font-size: 14px;
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
+    background-color: #008080; /* Cor clássica de fundo do Windows */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: #222;
+    margin: 20px;
 }
 
-.container {
-    display: flex;
-    height: 100vh;
-}
-
-/* Barra Lateral Esquerda */
-#sidebar {
-    width: 300px;
-    min-width: 250px;
-    background-color: #c0c0c0;
-    padding: 10px;
-    border-right: 2px solid;
-    border-color: #fff #808080; /* Efeito 3D de relevo */
-    overflow-y: auto;
-    box-sizing: border-box;
-}
-
-#sidebar h1 {
-    font-size: 18px;
-    margin: 0 0 10px 0;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #808080;
-}
-
-/* Área de Visualização Principal */
-#content-viewer {
-    flex-grow: 1;
-    padding: 15px;
-    margin: 8px;
-    background-color: #fff;
+.window-container {
     border: 2px solid;
-    border-color: #808080 #fff #fff #808080; /* Efeito 3D de "afundado" */
-    overflow-y: auto;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    background-color: #c0c0c0;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.title-bar {
+    background: linear-gradient(to right, #000080, #1084d0);
+    padding: 3px 5px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px #000;
+}
+
+.title-bar-controls button {
+    width: 16px;
+    height: 14px;
+    margin-left: 2px;
+    border: 1px solid;
+    border-top-color: #ffffff;
+    border-left-color: #ffffff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    background-color: #c0c0c0;
+    font-family: 'Marlett', 'Arial';
+    font-size: 10px;
+    text-align: center;
+    line-height: 12px;
+}
+.title-bar-controls button:active {
+    border-top-color: #404040;
+    border-left-color: #404040;
+    border-right-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+button[aria-label="Close"]::before { content: "r"; }
+button[aria-label="Maximize"]::before { content: "1"; }
+button[aria-label="Minimize"]::before { content: "0"; }
+
+
+.window-body {
+    display: flex;
+    min-height: 70vh;
+    padding: 10px;
+}
+
+/* --- Barra Lateral --- */
+#sidebar {
+    width: 30%;
+    min-width: 200px;
+    padding: 10px;
+    margin-right: 10px;
+    border: 2px inset #c0c0c0;
+    background-color: #ffffff;
+    overflow-y: auto;
+}
+
+.folder, .file {
+    padding: 4px 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.folder {
+    font-weight: bold;
+}
+.folder::before {
+    content: '📁 '; /* Ou um ícone de pasta */
+}
+
+.file {
+    padding-left: 20px;
+}
+.file::before {
+    content: '📄 '; /* Ou um ícone de arquivo */
+}
+
+.file:hover, .folder:hover {
+    background-color: #000080;
+    color: white;
+}
+
+.folder-content {
+    padding-left: 15px;
+    border-left: 1px dashed #888;
+}
+
+/* --- Conteúdo Principal --- */
+#content {
+    flex-grow: 1;
+    border: 2px inset #c0c0c0;
+    padding: 10px;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
 }
 
-#content-viewer img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    background-color: #e0e0e0;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* Sombra suave na imagem */
-}
-
-.placeholder {
-    color: #808080;
+.image-viewer {
+    width: 100%;
+    height: 100%;
     text-align: center;
 }
 
-/* Estilo da Árvore de Arquivos */
-#file-tree ul {
-    list-style: none;
-    padding-left: 20px;
+#placeholder-text {
+    color: #888;
 }
 
-#file-tree li {
-    padding: 3px 0;
-}
-
-.tree-item {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.tree-item:hover {
-    background-color: #000080; /* Azul clássico de seleção */
-    color: #fff;
-}
-
-/* Ícones para pastas e arquivos */
-.folder::before {
-    content: '📁'; /* Ícone de pasta */
-    margin-right: 8px;
-}
-
-.file::before {
-    content: '📄'; /* Ícone de arquivo */
-    margin-right: 8px;
-}
-
-/* Esconder sub-listas por padrão */
-.collapsible-list {
-    display: none;
-}
-
-/* Mostrar sub-listas quando a pasta estiver expandida */
-.folder.expanded + .collapsible-list {
-    display: block;
-}
-
-.folder.expanded::before {
-    content: '📂'; /* Ícone de pasta aberta */
+#image-display {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border: 2px outset #c0c0c0;
 }
