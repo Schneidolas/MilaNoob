@@ -1,8 +1,8 @@
 // =======================================================
 // CONFIGURE AQUI SEU USUÁRIO E NOME DO REPOSITÓRIO
 // =======================================================
-const GITHUB_USER = "SEU_USUARIO_AQUI";
-const REPO_NAME = "NOME_DO_SEU_REPOSITORIO_AQUI";
+const GITHUB_USER = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/`;
+const REPO_NAME = "imagens/HUD";
 // =======================================================
 
 const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/`;
